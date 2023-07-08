@@ -6,6 +6,7 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.BiConsumer;
@@ -52,17 +53,44 @@ public class IGClient implements Serializable {
     private transient OkHttpClient httpClient;
     private transient String sessionId;
     private transient IGClientActions actions;
+    private String advertisingId;
     @Accessors(chain = true)
     private transient ExceptionallyHandler exceptionallyHandler;
     private String deviceId;
     private String guid;
-    private String phoneId;
+
+    private String _uuid = String.valueOf(0);
+    private String phone_id;
     @Setter(AccessLevel.PRIVATE)
     private boolean loggedIn = false;
     @Setter(AccessLevel.PRIVATE)
     private Profile selfProfile;
     @Accessors(chain = true)
     private IGDevice device = IGAndroidDevice.GOOD_DEVICES[0];
+    private String mid;
+
+//                "uuids": {
+//        "phone_id": self.phone_id,
+//                "uuid": self.uuid,
+//                "client_session_id": self.client_session_id,
+//                "advertising_id": self.advertising_id,
+//                "android_device_id": self.android_device_id,
+//                # "device_id": self.uuid,
+//                "request_id": self.request_id,
+//                "tray_session_id": self.tray_session_id,
+//    },
+//            "mid": self.mid,
+//            "ig_u_rur": self.ig_u_rur,
+//            "ig_www_claim": self.ig_www_claim,
+//            "authorization_data": self.authorization_data,
+//            "cookies": requests.utils.dict_from_cookiejar(self.private.cookies),
+//            "last_login": self.last_login,
+//            "device_settings": self.device_settings,
+//            "user_agent": self.user_agent,
+//            "country": self.country,
+//            "country_code": self.country_code,
+//            "locale": self.locale,
+//            "timezone_offset": self.timezone_offset,
 
     public IGClient(String username, String password) {
         this(username, password, IGUtils.defaultHttpClientBuilder().build());
@@ -71,16 +99,17 @@ public class IGClient implements Serializable {
     public IGClient(String username, String password, OkHttpClient client) {
         this.$username = username;
         this.$password = password;
-        this.guid = IGUtils.randomUuid();
-        this.phoneId = IGUtils.randomUuid();
+        this.guid = UUID.randomUUID().toString();
+        this.phone_id = UUID.randomUUID().toString();
         this.deviceId = IGUtils.generateDeviceId(username, password);
         this.httpClient = client;
         this.initializeDefaults();
     }
 
     private void initializeDefaults() {
-        this.sessionId = IGUtils.randomUuid();
+        this.sessionId = UUID.randomUUID().toString();
         this.actions = new IGClientActions(this);
+        this.advertisingId = UUID.randomUUID().toString();
         this.exceptionallyHandler = new ExceptionallyHandler() {
 
             @Override
@@ -105,7 +134,7 @@ public class IGClient implements Serializable {
                 })
                 .thenApply((res) -> {
                     this.setLoggedInState(res);
-
+                    this._uuid = String.valueOf(res.getLogged_in_user().getPk());
                     return res;
                 });
     }
@@ -150,12 +179,9 @@ public class IGClient implements Serializable {
                     log.info("Response for {} with body (truncated) : {}",
                             res.getFirst().request().url(),
                             IGUtils.truncate(res.getSecond()));
-
                     return req.parseResponse(res);
                 })
-                .exceptionally((tr) -> {
-                    return this.exceptionallyHandler.handle(tr, req.getResponseType());
-                });
+                .exceptionally((tr) -> this.exceptionallyHandler.handle(tr, req.getResponseType()));
     }
 
     private void setLoggedInState(LoginResponse state) {
@@ -178,6 +204,8 @@ public class IGClient implements Serializable {
                 .ifPresent(s -> this.encryptionKey = s);
         Optional.ofNullable(res.header("ig-set-authorization"))
                 .ifPresent(s -> this.authorization = s);
+        Optional.ofNullable(res.header("ig-set-x-mid"))
+                .ifPresent(s -> this.mid = s);
     }
 
     public IGPayload setIGPayloadDefaults(IGPayload load) {
@@ -190,8 +218,7 @@ public class IGClient implements Serializable {
             load.setId(this.guid);
         }
         load.setGuid(this.guid);
-        load.setPhone_id(this.phoneId);
-
+        load.setPhone_id(this.phone_id);
         return load;
     }
 
@@ -236,7 +263,6 @@ public class IGClient implements Serializable {
         private String username;
         private String password;
         private OkHttpClient client;
-        private IGDevice device = IGAndroidDevice.GOOD_DEVICES[0];
         private LoginHandler onChallenge;
         private LoginHandler onTwoFactor;
         private BiConsumer<IGClient, LoginResponse> onLogin = (client, login) -> {
@@ -244,7 +270,7 @@ public class IGClient implements Serializable {
 
         public IGClient build() {
             return new IGClient(username, password, Optional.ofNullable(client)
-                    .orElseGet(() -> IGUtils.defaultHttpClientBuilder().build())).setDevice(device);
+                    .orElseGet(() -> IGUtils.defaultHttpClientBuilder().build()));
         }
 
         public IGClient simulatedLogin(Consumer<List<CompletableFuture<?>>> postLoginResponses)

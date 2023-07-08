@@ -23,6 +23,7 @@ public abstract class IGPostRequest<T extends IGResponse> extends IGRequest<T> {
     @Override
     public Request formRequest(IGClient client) {
         Request.Builder req = new Request.Builder().url(this.formUrl(client));
+        req.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         this.applyHeaders(client, req);
         req.post(this.getRequestBody(client));
 

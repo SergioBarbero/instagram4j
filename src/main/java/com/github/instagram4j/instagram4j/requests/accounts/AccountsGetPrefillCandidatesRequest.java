@@ -17,7 +17,7 @@ public class AccountsGetPrefillCandidatesRequest extends IGPostRequest<IGRespons
 
     @Override
     protected IGBaseModel getPayload(IGClient client) {
-        return new PrePayload(client.getDeviceId(), client.getPhoneId(), client.getGuid());
+        return new PrePayload(client.getDeviceId(), client.getPhone_id(), client.getGuid());
     }
 
     @Override

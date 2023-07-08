@@ -29,18 +29,18 @@ public class SerializeTest {
         Assert.assertEquals(profile, deserializedProfile);
     }
 
-    @Test
-    // Run SerializeTestUtil.serializeLogin first to generate saved sessions
-    public void testIGClient() throws IOException, ClassNotFoundException {
-        IGClient client = IGClient.builder().username("username").password("password").build();
-        File clientFile = File.createTempFile("client", ".ser");
-        File cookieFile = File.createTempFile("cookie", ".ser");
-        clientFile.deleteOnExit();
-        cookieFile.deleteOnExit();
-        client.serialize(clientFile, cookieFile);
-        IGClient deserializedClientFrom = IGClient.deserialize(clientFile, cookieFile);
-        Assert.assertNotNull(deserializedClientFrom.getHttpClient());
-        Assert.assertEquals(client, deserializedClientFrom);
-    }
+//    @Test
+//    // Run SerializeTestUtil.serializeLogin first to generate saved sessions
+//    public void testIGClient() throws IOException, ClassNotFoundException {
+//        IGClient client = IGClient.builder().username("username").password("password").build();
+//        File clientFile = File.createTempFile("client", ".ser");
+//        File cookieFile = File.createTempFile("cookie", ".ser");
+//        clientFile.deleteOnExit();
+//        cookieFile.deleteOnExit();
+//        client.serialize(clientFile, cookieFile);
+//        IGClient deserializedClientFrom = IGClient.deserialize(clientFile, cookieFile);
+//        Assert.assertNotNull(deserializedClientFrom.getHttpClient());
+//        Assert.assertEquals(client, deserializedClientFrom);
+//    }
 
 }

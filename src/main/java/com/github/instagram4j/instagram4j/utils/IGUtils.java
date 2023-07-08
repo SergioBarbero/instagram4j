@@ -11,10 +11,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
@@ -215,10 +212,6 @@ public class IGUtils {
 
     public static OkHttpClient.Builder defaultHttpClientBuilder() {
         return new OkHttpClient.Builder().cookieJar(new SerializableCookieJar());
-    }
-
-    public static String randomUuid() {
-        return UUID.randomUUID().toString();
     }
 
     @SneakyThrows(JsonProcessingException.class)

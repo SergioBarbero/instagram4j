@@ -40,6 +40,15 @@ public class DirectThreadsBroadcastRequest extends IGPostRequest<IGResponse> {
     @JsonInclude(Include.NON_NULL)
     public static abstract class BroadcastPayload extends IGPayload {
         private String action = "send_item";
+        private String is_x_transport_forward = "false";
+        private String send_silently = "false";
+        private String is_shh_mode = "0";
+        private String send_attribution = "message_button";
+        private String client_context;
+        private String mutation_token;
+        // private String _uuid from superclass
+        private String nav_chain = "1qT:feed_timeline:1,1qT:feed_timeline:2,1qT:feed_timeline:3,7Az:direct_inbox:4,7Az:direct_inbox:5,5rG:direct_thread:7";
+        private String offline_threading_id;
 
         @JsonIgnore
         public abstract String getItemType();
@@ -58,6 +67,10 @@ public class DirectThreadsBroadcastRequest extends IGPostRequest<IGResponse> {
         public BroadcastTextPayload(String text, long... pks) {
             this.thread_ids = null;
             this.recipient_users = IGUtils.objectToJson(Arrays.asList(pks));
+            String client_context = String.valueOf(getRandomLong(6800011111111111111L, 6800099999999999999L));
+            this.setClient_context(client_context);
+            this.setMutation_token(client_context);
+            this.setOffline_threading_id(client_context);
             this.text = text;
         }
 

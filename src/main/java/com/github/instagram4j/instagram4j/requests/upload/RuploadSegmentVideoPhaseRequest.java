@@ -15,6 +15,8 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class RuploadSegmentVideoPhaseRequest extends IGPostRequest<IGResponse> {
@@ -34,7 +36,7 @@ public class RuploadSegmentVideoPhaseRequest extends IGPostRequest<IGResponse> {
         this.stream_id = stream_id;
     }
 
-    private final String uuid = IGUtils.randomUuid();
+    private final String uuid = UUID.randomUUID().toString();
 
     @Override
     public String apiPath() {
@@ -55,7 +57,7 @@ public class RuploadSegmentVideoPhaseRequest extends IGPostRequest<IGResponse> {
     public Request.Builder applyHeaders(IGClient client, Request.Builder req) {
         super.applyHeaders(client, req);
         req.addHeader("X-Instagram-Rupload-Params", IGUtils.objectToJson(upload_params));
-        req.addHeader("X_FB_WATERFALL_ID", IGUtils.randomUuid());
+        req.addHeader("X_FB_WATERFALL_ID", UUID.randomUUID().toString());
         this.addHeadersBaseOnPhase(req);
         return req;
     }

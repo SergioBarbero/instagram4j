@@ -1,13 +1,20 @@
 package instagram4j;
 
+import com.github.instagram4j.instagram4j.IGClient;
+import com.github.instagram4j.instagram4j.requests.IGRequest;
+import com.github.instagram4j.instagram4j.requests.direct.DirectThreadsBroadcastRequest;
+import com.github.instagram4j.instagram4j.requests.qe.QeSyncRequest;
+import com.github.instagram4j.instagram4j.requests.users.UsersUsernameInfoRequest;
+import com.github.instagram4j.instagram4j.responses.IGResponse;
+import com.github.instagram4j.instagram4j.responses.accounts.LoginResponse;
+import com.github.instagram4j.instagram4j.responses.users.UserResponse;
+import okhttp3.Request;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.github.instagram4j.instagram4j.IGClient;
-import com.github.instagram4j.instagram4j.requests.IGRequest;
-import com.github.instagram4j.instagram4j.responses.IGResponse;
-
-import okhttp3.Request;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class RequestTest {
     private class IGTestRequest extends IGRequest<IGResponse> {

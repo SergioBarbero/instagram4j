@@ -1,5 +1,6 @@
 package com.github.instagram4j.instagram4j.requests.upload;
 
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.github.instagram4j.instagram4j.IGClient;
@@ -44,7 +45,7 @@ public class RuploadVideoRequest extends IGPostRequest<IGResponse> {
     public Request.Builder applyHeaders(IGClient client, Request.Builder req) {
         super.applyHeaders(client, req);
         req.addHeader("X-Instagram-Rupload-Params", IGUtils.objectToJson(upload_params));
-        req.addHeader("X_FB_VIDEO_WATERFALL_ID", IGUtils.randomUuid());
+        req.addHeader("X_FB_VIDEO_WATERFALL_ID", UUID.randomUUID().toString());
         req.addHeader("X-Entity-Type", "video/mp4");
         req.addHeader("Offset", "0");
         req.addHeader("X-Entity-Name", name);

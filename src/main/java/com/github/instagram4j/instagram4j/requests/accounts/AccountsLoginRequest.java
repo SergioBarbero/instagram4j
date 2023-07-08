@@ -9,8 +9,12 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 public class AccountsLoginRequest extends IGPostRequest<LoginResponse> {
+
+    public static String phoneId = UUID.randomUUID().toString();
     @NonNull
     private String username;
     @NonNull
@@ -23,7 +27,13 @@ public class AccountsLoginRequest extends IGPostRequest<LoginResponse> {
 
     @Override
     public IGPayload getPayload(IGClient client) {
-        return new LoginPayload(username, password);
+        LoginPayload loginPayload = new LoginPayload(username, password);
+        loginPayload.set_csrftoken(null);
+        loginPayload.setAdid(client.getAdvertisingId());
+        loginPayload.setJazoest(String.valueOf(AccountsLoginRequest.genJazoest(phoneId)));
+        loginPayload.setAdid(client.getAdvertisingId());
+        loginPayload.setGuid(client.getGuid());
+        return loginPayload;
     }
 
     @Override
@@ -37,7 +47,23 @@ public class AccountsLoginRequest extends IGPostRequest<LoginResponse> {
         private String username;
         @NonNull
         private String enc_password;
-        private int login_attempt_account = 0;
+        private String login_attempt_count = "0";
+        private String jazoest;
+        private String country_codes = "[{\"country_code\":\"1\",\"source\":[\"default\"]}]";
+        private String adid;
+        private String guid;
+        private String google_tokens = "[]";
+    }
+
+    public static int genJazoest(String poneId) {
+        int sum = 0;
+        for (int i = 0; i < poneId.length(); i++) {
+            // Print current character
+            char c = poneId.charAt(i);
+            int code = Character.getType(c);
+            sum += code;
+        }
+        return sum;
     }
 
 }

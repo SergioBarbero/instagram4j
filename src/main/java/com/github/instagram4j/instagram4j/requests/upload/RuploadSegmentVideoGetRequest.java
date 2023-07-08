@@ -10,6 +10,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import okhttp3.Request;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 public class RuploadSegmentVideoGetRequest extends IGGetRequest<IGResponse> {
     @NonNull
@@ -34,7 +36,7 @@ public class RuploadSegmentVideoGetRequest extends IGGetRequest<IGResponse> {
         req.addHeader("Stream-Id", stream_id);
         req.addHeader("Segment-Type", "2");
         req.addHeader("Segment-Start-Offset", segment_offset);
-        req.addHeader("X_FB_WATERFALL_ID", IGUtils.randomUuid());
+        req.addHeader("X_FB_WATERFALL_ID", UUID.randomUUID().toString());
         return req;
     }
 

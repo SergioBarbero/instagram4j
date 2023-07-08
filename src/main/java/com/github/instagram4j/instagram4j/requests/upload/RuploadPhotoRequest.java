@@ -1,12 +1,12 @@
 package com.github.instagram4j.instagram4j.requests.upload;
 
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import com.github.instagram4j.instagram4j.IGClient;
 import com.github.instagram4j.instagram4j.models.IGPayload;
 import com.github.instagram4j.instagram4j.models.media.UploadParameters;
 import com.github.instagram4j.instagram4j.requests.IGPostRequest;
 import com.github.instagram4j.instagram4j.responses.media.RuploadPhotoResponse;
-import com.github.instagram4j.instagram4j.utils.IGUtils;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -51,7 +51,7 @@ public class RuploadPhotoRequest extends IGPostRequest<RuploadPhotoResponse> {
         super.applyHeaders(client, req);
         req.addHeader("X-Instagram-Rupload-Params",
                 UploadParameters.forPhoto(uploadId, mediaType, isSidecar, broadcastId).toString());
-        req.addHeader("X_FB_WATERFALL_ID", IGUtils.randomUuid());
+        req.addHeader("X_FB_WATERFALL_ID", UUID.randomUUID().toString());
         req.addHeader("Accept-Encoding", "gzip");
         req.addHeader("X-Entity-Name", name);
         req.addHeader("X-Entity-Type", "image/jpeg");

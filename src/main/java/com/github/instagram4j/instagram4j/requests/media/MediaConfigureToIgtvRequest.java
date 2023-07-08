@@ -6,13 +6,14 @@ import com.github.instagram4j.instagram4j.IGClient;
 import com.github.instagram4j.instagram4j.models.IGPayload;
 import com.github.instagram4j.instagram4j.requests.IGPostRequest;
 import com.github.instagram4j.instagram4j.responses.media.MediaResponse.MediaConfigureToIgtvResponse;
-import com.github.instagram4j.instagram4j.utils.IGUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import okhttp3.Request;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -53,7 +54,7 @@ public class MediaConfigureToIgtvRequest extends IGPostRequest<MediaConfigureToI
         private String source_type = "4";
         private boolean keep_shoppable_products = false;
         private boolean igtv_ads_toggled_on = false;
-        private String igtv_composer_session_id = IGUtils.randomUuid();
+        private String igtv_composer_session_id = UUID.randomUUID().toString();
         private String length = "68";
         private String retryContext =
                 "{\"num_step_auto_retry\":0,\"num_reupload\":0,\"num_step_manual_retry\":0}";

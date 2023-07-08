@@ -23,7 +23,7 @@ public class LauncherSyncRequest extends IGPostRequest<IGResponse> {
 
     @Override
     protected IGBaseModel getPayload(IGClient client) {
-        return preLogin ? new PrePayload(client.getPhoneId()) : new PostPayload();
+        return preLogin ? new PrePayload(client.getPhone_id()) : new PostPayload();
     }
 
     @Override
